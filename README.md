@@ -5,8 +5,8 @@ A distinctive, static consulting website preview. The working brand focuses on d
 ## Status
 
 - **Preview only; not a launched consulting business site.**
-- The project brief is a **browser-local worksheet**, not a contact form. It sends no data, stores nothing in browser storage, and makes no API requests. Visitors can preview and download their own text brief, or open a draft in their email app addressed to carlos@camytaconsulting.com. They must review and send the email themselves. If the app fails to open or truncates a long draft, the downloadable brief can be attached manually.
-- The approved contact email is carlos@camytaconsulting.com. No server-side intake endpoint, phone number, analytics, customer logos, testimonials, certifications, partner claims, or case studies are included.
+- The project brief preview/download stays local. Send inquiry posts name, reply email and project details to the same-origin Worker, which sends plain-text email through Resend to carlos@camytaconsulting.com only. The visitor receives no automatic email.
+- The approved contact email is carlos@camytaconsulting.com. No analytics, customer logos, testimonials, certifications, partner claims, or case studies are included.
 - Search indexing is disabled through meta robots and robots.txt until launch review.
 - Brand wording and service scope are subject to final owner review before launch.
 
@@ -34,9 +34,9 @@ Open the localhost URL printed by the server. Do not open index.html directly fr
 
 ## Cloudflare deployment
 
-The build command is `npm run build`. Static output is `dist`. The configuration in `wrangler.jsonc` serves `dist` as static assets. The deployment command is `npx wrangler deploy`; this requires appropriate Cloudflare account authorization. The existing Worker is deployed at https://camytaconsulting.com and https://www.camytaconsulting.com; GitHub main triggers builds. No mail transport is configured. Server-side submissions would require an authorized mail service plus server validation, abuse controls, and delivery testing.
+The build command is `npm run build`. Static output is `dist`. The configuration in `wrangler.jsonc` serves `dist` as static assets. The deployment command is `npx wrangler deploy`; this requires appropriate Cloudflare account authorization. The existing Worker is deployed at https://camytaconsulting.com and https://www.camytaconsulting.com; GitHub main triggers builds. Resend is the email transport. Set RESEND_API_KEY only as a Worker secret, using a sending-only key scoped to notify.camytaconsulting.com. Never put it in source, client code, build variables, or logs. Without this secret or rate-limit bindings, submissions fail closed.
 
-The `dist` directory is generated and ignored by Git. Do not store credentials in the repository. `_headers` provides a restrictive CSP, including no outbound connections or form submission.
+The `dist` directory is generated and ignored by Git. Do not store credentials in the repository. `_headers` provides a restrictive CSP, allowing only same-origin browser connections and no native form submission.
 
 ## Before public launch
 
@@ -53,3 +53,7 @@ The `dist` directory is generated and ignored by Git. Do not store credentials i
 `scripts/`: local build and preview server.
 `tests/`: Node test suite for content, behavior helpers, links, assets, and preview safeguards.
 `wrangler.jsonc`: deployment configuration, not account credentials.
+
+## Contact protection and limits
+
+The Worker validates and bounds fields and request bytes, checks allowed origins, uses a honeypot, and sends only to the fixed owner address. Provider idempotency protects repeated attempts for the same inquiry for up to 24 hours; the UI disables duplicate sends and preserves the key on uncertain retries. Expired inquiries are rejected. Rate limits are 3 attempts per minute per hashed IP and reply address, plus 10 per minute globally per Cloudflare location. These limits are approximate and do not prevent distributed abuse; shared networks may hit limits. No application database or content logging is used. Cloudflare and Resend process submission data for delivery; Resend provider history and the owner inbox may retain it. Free-tier quotas can stop delivery, and errors remain visible with the direct-email fallback.

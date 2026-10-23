@@ -41,8 +41,8 @@ form.addEventListener('submit',event=>{
   result.hidden=false;result.focus();
  }catch(error){goal.setCustomValidity(error.message);goal.reportValidity();goal.focus();}
 });
-form.addEventListener('input',()=>{goal.setCustomValidity('');if(!result.hidden){result.hidden=true;brief='';}});
-form.addEventListener('change',()=>{if(!result.hidden){result.hidden=true;brief='';}});
+form.addEventListener('input',event=>{goal.setCustomValidity('');if(event.target.closest('#brief-result'))return;if(!result.hidden){result.hidden=true;brief='';}});
+form.addEventListener('change',event=>{if(event.target.closest('#brief-result'))return;if(!result.hidden){result.hidden=true;brief='';}});
 document.querySelector('#edit-brief').addEventListener('click',()=>{result.hidden=true;brief='';goal.focus();});
 document.querySelector('#download-brief').addEventListener('click',()=>{
  if(!brief)return;
@@ -50,3 +50,30 @@ document.querySelector('#download-brief').addEventListener('click',()=>{
  const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download='Camyta-Project-Brief.txt';document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 document.querySelector('#year').textContent=String(new Date().getFullYear());
+
+const sendButton=document.querySelector('#send-inquiry');
+const sendStatus=document.querySelector('#send-status');
+let sending=false,sent=false,requestId='',previousPayload='';
+const newInquiry=()=>{if(sending)return;sent=false;sendButton.disabled=false;sendStatus.textContent='';};
+form.addEventListener('input',newInquiry);
+form.addEventListener('change',newInquiry);
+document.querySelector('#edit-brief').addEventListener('click',newInquiry);
+sendButton.addEventListener('click',async()=>{
+ if(sending||sent||!brief)return;
+ const name=document.querySelector('#contact-name'),email=document.querySelector('#contact-email');
+ if(!name.value.trim()){sendStatus.textContent='Please enter your name.';name.focus();return;}
+ if(!email.value.trim()||!email.validity.valid){sendStatus.textContent='Please enter a valid email address.';email.focus();return;}
+ const data=new FormData(form);
+ const payload={name:name.value.trim(),email:email.value.trim(),goal:goal.value,support:data.getAll('support'),stage:data.get('stage'),website:document.querySelector('#contact-website').value};
+ const canonical=JSON.stringify(payload);
+ if(canonical!==previousPayload||!requestId){requestId=Date.now()+'_'+crypto.randomUUID();previousPayload=canonical;}
+ sending=true;sendButton.disabled=true;sendStatus.textContent='Sending your inquiry…';
+ const controls=[...form.querySelectorAll('input,textarea,select,button')];const disabled=controls.map(c=>c.disabled);controls.forEach(c=>c.disabled=true);
+ try{
+  const response=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,requestId}),signal:AbortSignal.timeout(18000)});
+  const outcome=await response.json();
+  if(!response.ok)throw Error(outcome.message||'Sending could not be confirmed. Please retry or email Carlos.');
+  sent=true;sendStatus.textContent=outcome.message;
+ }catch(error){sendStatus.textContent=error.name==='TimeoutError'||error.name==='TypeError'?'Sending could not be confirmed. Retry this same inquiry safely, or email Carlos directly.':error.message;}
+ finally{sending=false;controls.forEach((c,i)=>c.disabled=disabled[i]);sendButton.disabled=sent;}
+});
