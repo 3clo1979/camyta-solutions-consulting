@@ -5,7 +5,7 @@ A distinctive, static consulting website preview. The working brand focuses on d
 ## Status
 
 - **Preview only; not a launched consulting business site.**
-- The project brief preview/download stays local. Send inquiry posts name, reply email and project details to the same-origin Worker, which sends plain-text email through Resend to carlos@camytaconsulting.com only. The visitor receives no automatic email.
+- The project brief preview stays local. Send inquiry posts name, reply email and project details to the same-origin Worker, which sends plain-text email through Resend to carlos@camytaconsulting.com only. The visitor receives no automatic email.
 - The approved contact email is carlos@camytaconsulting.com. No analytics, customer logos, testimonials, certifications, partner claims, or case studies are included.
 - Search indexing is disabled through meta robots and robots.txt until launch review.
 - Brand wording and service scope are subject to final owner review before launch.
@@ -28,7 +28,7 @@ Open the localhost URL printed by the server. Do not open index.html directly fr
 - Exact approved raster logo concept, presented using a CSS viewport showing the primary lockup. The source sheet is preserved unchanged; this is not an editable vector master.
 - Native expandable service descriptions.
 - Accessible keyboard-operated five-phase approach explorer. Document previews are explicitly illustrative.
-- Local project-brief preview and text download, without transmission.
+- Local project-brief preview and editing, with direct inquiry submission.
 - Reduced-motion handling, semantic markup, focus states, and mobile navigation.
 - Build/test scripts and Cloudflare static-assets configuration.
 

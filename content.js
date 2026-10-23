@@ -7,17 +7,13 @@ export const phases = {
 };
 export const supportOptions = ['Discovery & requirements','Architecture & integrations','Scope & planning','Project leadership','Testing & handoff','Help defining the need'];
 export const contactEmail = 'carlos@camytaconsulting.com';
-export function briefEmailHref(brief) {
- if (!String(brief ?? '').trim()) throw new Error('Prepare your project brief first.');
- return `mailto:${contactEmail}?subject=${encodeURIComponent('Project inquiry — Camyta Solutions Consulting')}&body=${encodeURIComponent(brief)}`;
-}
 export const stageOptions = ['Exploring an idea','Defining requirements','Planning implementation','Already underway','Preparing for launch or handoff'];
 export function makeBrief({support = [], stage, goal}) {
  const cleanGoal = String(goal ?? '').trim().slice(0,2000);
  if (!cleanGoal) throw new Error('Please describe what you would like to make better.');
  const safeSupport = [...new Set(support)].filter(value=>supportOptions.includes(value));
  const safeStage = stageOptions.includes(stage) ? stage : stageOptions[0];
- return `CAMYTA SOLUTIONS CONSULTING\nPROJECT BRIEF — WORKING NOTES\n\nSupport needed: ${safeSupport.length ? safeSupport.join(', ') : 'To be discussed'}\nProject stage: ${safeStage}\n\nWhat I would like to make better:\n${cleanGoal}\n\nPrepared locally using the Camyta website preview.\nThis brief has not been submitted or sent to Camyta.\n`;
+ return `CAMYTA SOLUTIONS CONSULTING\nPROJECT BRIEF — WORKING NOTES\n\nSupport needed: ${safeSupport.length ? safeSupport.join(', ') : 'To be discussed'}\nProject stage: ${safeStage}\n\nWhat I would like to make better:\n${cleanGoal}\n`;
 }
 export function adjacentTab(index, key, count) {
  if (key === 'ArrowRight') return (index+1)%count;
