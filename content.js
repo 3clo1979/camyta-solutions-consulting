@@ -6,6 +6,11 @@ export const phases = {
  transition: { kicker:'LEAVE THE CLIENT READY', title:'Make ownership part of the handoff.', description:'Help the business and support teams understand what has been delivered and what remains open. Documentation and knowledge transfer are part of the work.', tasks:['Solution documentation and knowledge transfer','Open-item and readiness summaries','Support responsibilities and ownership'], artifact:'HANDOFF PACKAGE', question:'Who owns what comes next?', rows:[['Delivered work','Document the solution'],['Open items','Be explicit about gaps'],['Ownership','Agree the next steps']], outcome:'An informed handoff with clear responsibilities and next steps.' }
 };
 export const supportOptions = ['Discovery & requirements','Architecture & integrations','Scope & planning','Project leadership','Testing & handoff','Help defining the need'];
+export const contactEmail = 'carlos@camytaconsulting.com';
+export function briefEmailHref(brief) {
+ if (!String(brief ?? '').trim()) throw new Error('Prepare your project brief first.');
+ return `mailto:${contactEmail}?subject=${encodeURIComponent('Project inquiry — Camyta Solutions Consulting')}&body=${encodeURIComponent(brief)}`;
+}
 export const stageOptions = ['Exploring an idea','Defining requirements','Planning implementation','Already underway','Preparing for launch or handoff'];
 export function makeBrief({support = [], stage, goal}) {
  const cleanGoal = String(goal ?? '').trim().slice(0,2000);

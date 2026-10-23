@@ -1,4 +1,4 @@
-import { phases, makeBrief, adjacentTab } from './content.js';
+import { phases, makeBrief, adjacentTab, briefEmailHref } from './content.js';
 const menuToggle=document.querySelector('.menu-toggle');
 const nav=document.querySelector('#main-nav');
 const closeMenu=()=>{nav.classList.remove('is-open');menuToggle.setAttribute('aria-expanded','false');};
@@ -37,6 +37,7 @@ form.addEventListener('submit',event=>{
   const data=new FormData(form);
   brief=makeBrief({support:data.getAll('support'),stage:data.get('stage'),goal:data.get('goal')});
   document.querySelector('#brief-summary').textContent=brief;
+  document.querySelector('#email-brief').href=briefEmailHref(brief);
   result.hidden=false;result.focus();
  }catch(error){goal.setCustomValidity(error.message);goal.reportValidity();goal.focus();}
 });
