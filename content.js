@@ -1,0 +1,23 @@
+export const phases = {
+ discover: { kicker:'BEGIN WITH THE RIGHT QUESTIONS', title:'Understand the work before changing it.', description:'Listen to the people closest to the process. Understand the business problem, existing systems, constraints, and desired outcomes before prescribing a solution.', tasks:['Stakeholder conversations and workshops','Current-state workflows and pain points','Objectives, constraints, and initial risks'], artifact:'DISCOVERY BRIEF', question:'What needs to work differently?', rows:[['Business need','Define the change'],['People & process','Understand the reality'],['Constraints','Surface them early']], outcome:'A shared understanding of the problem worth solving.' },
+ define: { kicker:'MAKE THE EXPECTATIONS EXPLICIT', title:'Turn ideas into an agreed definition.', description:'Connect the business need to specific requirements and scope. Establish the priorities, responsibilities, and acceptance criteria that guide the work.', tasks:['Prioritized requirements and SRDs','Scope, exclusions, and responsibilities','Testable acceptance criteria'], artifact:'REQUIREMENTS BASELINE', question:'What does the solution need to do?', rows:[['Requirements','Describe the behavior'],['Scope boundaries','State what is included'],['Acceptance','Agree how to validate']], outcome:'A usable baseline for design, estimates, and decisions.' },
+ design: { kicker:'CONNECT THE NEED TO THE SOLUTION', title:'Make the path practical, not just possible.', description:'Evaluate how the solution fits the existing technology and operating environment. Make technical choices, assumptions, and delivery dependencies visible.', tasks:['Solution architecture and integration planning','Statements of work and effort estimates','Dependencies, risks, and delivery checkpoints'], artifact:'SOLUTION BLUEPRINT', question:'How should the pieces work together?', rows:[['Architecture','Connect systems & workflows'],['Tradeoffs','Explain the choices'],['Delivery plan','Expose the dependencies']], outcome:'A practical design and plan with documented assumptions.' },
+ guide: { kicker:'KEEP PEOPLE AND DECISIONS CONNECTED', title:'Move forward with informed decisions.', description:'Support the agreed delivery activities, coordinate stakeholders and vendors, and validate the work against requirements. Raise issues before they become surprises.', tasks:['Project and vendor coordination','Risk, issue, and change assessment','User acceptance testing and readiness reviews'], artifact:'DELIVERY CHECKPOINT', question:'Are we still solving the right problem?', rows:[['Progress','Make the status clear'],['Changes & risks','Assess the impact'],['Validation','Check against the need']], outcome:'Clear ownership, visible tradeoffs, and informed next steps.' },
+ transition: { kicker:'LEAVE THE CLIENT READY', title:'Make ownership part of the handoff.', description:'Help the business and support teams understand what has been delivered and what remains open. Documentation and knowledge transfer are part of the work.', tasks:['Solution documentation and knowledge transfer','Open-item and readiness summaries','Support responsibilities and ownership'], artifact:'HANDOFF PACKAGE', question:'Who owns what comes next?', rows:[['Delivered work','Document the solution'],['Open items','Be explicit about gaps'],['Ownership','Agree the next steps']], outcome:'An informed handoff with clear responsibilities and next steps.' }
+};
+export const supportOptions = ['Discovery & requirements','Architecture & integrations','Scope & planning','Project leadership','Testing & handoff','Help defining the need'];
+export const stageOptions = ['Exploring an idea','Defining requirements','Planning implementation','Already underway','Preparing for launch or handoff'];
+export function makeBrief({support = [], stage, goal}) {
+ const cleanGoal = String(goal ?? '').trim().slice(0,2000);
+ if (!cleanGoal) throw new Error('Please describe what you would like to make better.');
+ const safeSupport = [...new Set(support)].filter(value=>supportOptions.includes(value));
+ const safeStage = stageOptions.includes(stage) ? stage : stageOptions[0];
+ return `CAMYTA SOLUTIONS CONSULTING\nPROJECT BRIEF — WORKING NOTES\n\nSupport needed: ${safeSupport.length ? safeSupport.join(', ') : 'To be discussed'}\nProject stage: ${safeStage}\n\nWhat I would like to make better:\n${cleanGoal}\n\nPrepared locally using the Camyta website preview.\nThis brief has not been submitted or sent to Camyta.\n`;
+}
+export function adjacentTab(index, key, count) {
+ if (key === 'ArrowRight') return (index+1)%count;
+ if (key === 'ArrowLeft') return (index-1+count)%count;
+ if (key === 'Home') return 0;
+ if (key === 'End') return count-1;
+ return index;
+}
