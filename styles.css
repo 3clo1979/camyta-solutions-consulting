@@ -7,3 +7,11 @@
 @media print{.preview-bar,.site-header nav,.menu-toggle,.hero-actions,.phase-tabs,.brief-form,.footer nav{display:none}body{font-size:11pt}.section-wrap,.page-grid{padding:30px 20px;break-inside:avoid}.blueprint{print-color-adjust:exact}.approach,.footer{print-color-adjust:exact}.project{display:block}.contact-notice{max-width:none}}
 
 .contact-email{text-decoration:underline;overflow-wrap:anywhere}
+
+/* Preserve the full approved portrait at every viewport; no cover crop. */
+.founder-portrait{margin:0;width:100%;max-width:430px;justify-self:center;background:var(--ink);box-shadow:18px 18px 0 var(--paper)}
+.founder-portrait img{display:block;width:100%;height:auto;object-fit:contain}
+.founder-portrait figcaption{padding:20px 23px;color:#fff;border-top:3px solid var(--teal)}
+.founder-portrait figcaption span{display:block;font:8px var(--mono);letter-spacing:.16em;color:#9ed6ce}
+.founder-portrait figcaption strong{display:block;font:19px var(--serif);font-weight:400;margin-top:7px}
+@media(max-width:800px){.founder-portrait{max-width:350px;box-shadow:10px 10px 0 var(--paper)}}
