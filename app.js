@@ -74,6 +74,9 @@ sendButton.addEventListener('click',async()=>{
   const outcome=await response.json();
   if(!response.ok)throw Error(outcome.message||'Sending could not be confirmed. Please retry or email Carlos.');
   sent=true;sendStatus.textContent=outcome.message;
+  brief=brief.replace('This brief has not been submitted or sent to Camyta.','Inquiry accepted for email delivery to Carlos. Inbox receipt is not yet confirmed.');
+  document.querySelector('#brief-summary').textContent=brief;
+  document.querySelector('#email-brief').href=briefEmailHref(brief);
  }catch(error){sendStatus.textContent=error.name==='TimeoutError'||error.name==='TypeError'?'Sending could not be confirmed. Retry this same inquiry safely, or email Carlos directly.':error.message;}
  finally{sending=false;controls.forEach((c,i)=>c.disabled=disabled[i]);sendButton.disabled=sent;}
 });
