@@ -15,3 +15,11 @@ test('No network requests, storage, external fonts or fabricated contact endpoin
 test('Public UI has accessible labels, reduced motion, mobile styles and honest illustrative labels',()=>{assert.match(html,/for="project-goal"/);assert.match(html,/for="project-stage"/);assert.match(html,/ILLUSTRATIVE/);assert.match(html,/not a client project/);assert.match(css,/prefers-reduced-motion:reduce/);assert.match(css,/max-width:480px/);assert.match(js,/Escape/);});
 test('Form controls match exported options',()=>{for(const option of [...supportOptions,...stageOptions])assert.ok(html.includes(option.replace(/&/g,'&')));});
 test('Security headers block unconnected form and outbound requests',async()=>{const headers=await readFile('_headers','utf8');assert.match(headers,/connect-src 'none'/);assert.match(headers,/form-action 'none'/);assert.match(headers,/frame-ancestors 'none'/);});
+
+test('Responsive line breaks retain whitespace when hidden on mobile',()=>{
+  const breaks=[...html.matchAll(/<br\s*\/?>(.)/g)];
+  assert.ok(breaks.length>0);
+  for(const match of breaks) assert.match(match[1],/\s/,'Every decorative line break must preserve a text separator');
+  const mobileText=html.replace(/<br\s*\/?>/g,'').replace(/<[^>]+>/g,'');
+  for(const phrase of ['change. We help','problem. Not','aren’t on','needs a']) assert.ok(mobileText.includes(phrase),phrase);
+});
